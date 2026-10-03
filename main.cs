@@ -11,22 +11,33 @@ class Program
             "июля", "августа", "сентября", "октября", "ноября", "декабря"
         };
 
-        Console.Write("Введите номер дня в году (1-365): ");
-        int n = int.Parse(Console.ReadLine());
-
-        if (n < 1 || n > 365)
+        try
         {
-            Console.WriteLine("Ошибка: число должно быть от 1 до 365");
-            return;
-        }
+            Console.Write("Введите номер дня в году (1-365): ");
+            int n = int.Parse(Console.ReadLine());
 
-        int month = 0;
-        while (n > daysInMonth[month])
+            if (n < 1 || n > 365)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(n), n, "Число должно быть от 1 до 365");
+            }
+
+            int month = 0;
+            while (n > daysInMonth[month])
+            {
+                n -= daysInMonth[month];
+                month++;
+            }
+
+            Console.WriteLine($"{n} {monthNames[month]}");
+        }
+        catch (ArgumentOutOfRangeException ex)
         {
-            n -= daysInMonth[month];
-            month++;
+            Console.WriteLine($"Ошибка: {ex.Message}");
         }
-
-        Console.WriteLine($"{n} {monthNames[month]}");
+        catch (FormatException)
+        {
+            Console.WriteLine("Ошибка: введено не целое число");
+        }
     }
 }
