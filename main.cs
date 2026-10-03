@@ -4,40 +4,32 @@ class Program
 {
     static void Main()
     {
-        int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-        string[] monthNames =
-        {
-            "января", "февраля", "марта", "апреля", "мая", "июня",
-            "июля", "августа", "сентября", "октября", "ноября", "декабря"
-        };
+        int[] days = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+        string[] names = { "января", "февраля", "марта", "апреля", "мая", "июня",
+                           "июля", "августа", "сентября", "октября", "ноября", "декабря" };
 
         try
         {
-            Console.Write("Введите номер дня в году (1-365): ");
+            Console.Write("Год: ");
+            int year = int.Parse(Console.ReadLine());
+            bool leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+            if (leap) days[1] = 29;
+            int max = leap ? 366 : 365;
+
+            Console.Write($"День (1-{max}): ");
             int n = int.Parse(Console.ReadLine());
+            if (n < 1 || n > max)
+                throw new Exception($"Число должно быть от 1 до {max}");
 
-            if (n < 1 || n > 365)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(n), n, "Число должно быть от 1 до 365");
-            }
+            int m = 0;
+            while (n > days[m])
+                n -= days[m++];
 
-            int month = 0;
-            while (n > daysInMonth[month])
-            {
-                n -= daysInMonth[month];
-                month++;
-            }
-
-            Console.WriteLine($"{n} {monthNames[month]}");
+            Console.WriteLine($"{n} {names[m]}");
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (Exception ex)
         {
-            Console.WriteLine($"Ошибка: {ex.Message}");
-        }
-        catch (FormatException)
-        {
-            Console.WriteLine("Ошибка: введено не целое число");
+            Console.WriteLine("Ошибка: " + ex.Message);
         }
     }
 }
