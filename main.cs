@@ -4,32 +4,29 @@ class Program
 {
     static void Main()
     {
-        int[] days = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-        string[] names = { "января", "февраля", "марта", "апреля", "мая", "июня",
-                           "июля", "августа", "сентября", "октября", "ноября", "декабря" };
+        int[] a = new int[10];
 
-        try
+        Console.WriteLine("Введите 10 чисел:");
+        for (int i = 0; i < 10; i++)
         {
-            Console.Write("Год: ");
-            int year = int.Parse(Console.ReadLine());
-            bool leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
-            if (leap) days[1] = 29;
-            int max = leap ? 366 : 365;
-
-            Console.Write($"День (1-{max}): ");
-            int n = int.Parse(Console.ReadLine());
-            if (n < 1 || n > max)
-                throw new Exception($"Число должно быть от 1 до {max}");
-
-            int m = 0;
-            while (n > days[m])
-                n -= days[m++];
-
-            Console.WriteLine($"{n} {names[m]}");
+            Console.Write($"Число {i + 1}: ");
+            a[i] = int.Parse(Console.ReadLine());
         }
-        catch (Exception ex)
+
+        int bad = -1;
+
+        for (int i = 1; i < 10; i++)
         {
-            Console.WriteLine("Ошибка: " + ex.Message);
+            if (a[i] <= a[i - 1])
+            {
+                bad = i + 1;
+                break;
+            }
         }
+
+        if (bad == -1)
+            Console.WriteLine("Последовательность упорядочена по возрастанию.");
+        else
+            Console.WriteLine($"Последовательность не упорядочена. Первое нарушение: число {bad} ({a[bad - 1]}).");
     }
 }
